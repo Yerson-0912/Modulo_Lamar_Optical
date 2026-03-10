@@ -1,0 +1,177 @@
+/**
+ * Planeación Operativa - Employee Hourly Schedule
+ * Estilos de calendario por estado de tarea
+ * Aplica en vistas: mes, semana y día
+ */
+
+/* ===============================================
+   VISTA DE MES - Color Azul Oscuro (No Realizado)
+   =============================================== */
+div.o_calendar_renderer .fc-event.o_calendar_color_0,
+div.o_calendar_renderer div.fc-daygrid-event.o_calendar_color_0,
+.fc-event.o_calendar_color_0 {
+    background-color: #0D47A1 !important;
+    border-color: #061362 !important;
+    color: #FFFFFF !important;
+}
+
+div.o_calendar_renderer .fc-event.o_calendar_color_0 .fc-content,
+div.o_calendar_renderer .fc-daygrid-event.o_calendar_color_0 .fc-content,
+.fc-event.o_calendar_color_0 .fc-content {
+    background-color: #0D47A1 !important;
+    color: #FFFFFF !important;
+}
+
+div.o_calendar_renderer .fc-event.o_calendar_color_0 .fc-title,
+div.o_calendar_renderer .fc-daygrid-event.o_calendar_color_0 .fc-title,
+.fc-event.o_calendar_color_0 .fc-title {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+}
+
+div.o_calendar_renderer .fc-event.o_calendar_color_0 *,
+.fc-event.o_calendar_color_0 * {
+    color: #FFFFFF !important;
+    background: transparent !important;
+}
+
+/* ===============================================
+   VISTA DE MES - Color Verde Oscuro (Realizado)
+   =============================================== */
+div.o_calendar_renderer .fc-event.o_calendar_color_1,
+div.o_calendar_renderer div.fc-daygrid-event.o_calendar_color_1,
+.fc-event.o_calendar_color_1 {
+    background-color: #1B5E20 !important;
+    border-color: #0D3B15 !important;
+    color: #FFFFFF !important;
+}
+
+div.o_calendar_renderer .fc-event.o_calendar_color_1 .fc-content,
+div.o_calendar_renderer .fc-daygrid-event.o_calendar_color_1 .fc-content,
+.fc-event.o_calendar_color_1 .fc-content {
+    background-color: #1B5E20 !important;
+    color: #FFFFFF !important;
+}
+
+div.o_calendar_renderer .fc-event.o_calendar_color_1 .fc-title,
+div.o_calendar_renderer .fc-daygrid-event.o_calendar_color_1 .fc-title,
+.fc-event.o_calendar_color_1 .fc-title {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+}
+
+div.o_calendar_renderer .fc-event.o_calendar_color_1 *,
+.fc-event.o_calendar_color_1 * {
+    color: #FFFFFF !important;
+    background: transparent !important;
+}
+
+/* ===============================================
+   VISTA DE SEMANA/DIA - Color Azul Oscuro (No Realizado)
+   =============================================== */
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 {
+    background-color: #0D47A1 !important;
+    border-left: 4px solid #061362 !important;
+}
+
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-main,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-main {
+    background-color: #0D47A1 !important;
+    color: #FFFFFF !important;
+}
+
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-main-frame,
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-title,
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-time,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-main-frame,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-title,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 .fc-event-time {
+    color: #FFFFFF !important;
+    background-color: transparent !important;
+    font-weight: 600 !important;
+}
+
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 *,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_0 * {
+    color: #FFFFFF !important;
+    background: transparent !important;
+}
+
+/* ===============================================
+   VISTA DE SEMANA/DIA - Color Verde Oscuro (Realizado)
+   =============================================== */
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 {
+    background-color: #1B5E20 !important;
+    border-left: 4px solid #0D3B15 !important;
+}
+
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-main,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-main {
+    background-color: #1B5E20 !important;
+    color: #FFFFFF !important;
+}
+
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-main-frame,
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-title,
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-time,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-main-frame,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-title,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 .fc-event-time {
+    color: #FFFFFF !important;
+    background-color: transparent !important;
+    font-weight: 600 !important;
+}
+
+div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 *,
+.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 * {
+    color: #FFFFFF !important;
+    background: transparent !important;
+}
+
+/* ===============================================
+   HOVER EN TODAS LAS VISTAS
+   =============================================== */
+.fc-event.o_calendar_color_0:hover,
+.fc-event.o_calendar_color_1:hover,
+.fc-daygrid-event.o_calendar_color_0:hover,
+.fc-daygrid-event.o_calendar_color_1:hover,
+.fc-timegrid-event.o_calendar_color_0:hover,
+.fc-timegrid-event.o_calendar_color_1:hover {
+    opacity: 0.9 !important;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transform: scale(1.02);
+}
+
+/* ===============================================
+   NOTAS Y OBSERVACIONES - TAMAÑO LEGIBLE
+   =============================================== */
+.o_employee_schedule_line_form .o_field_widget[name="note"] .note-editable,
+.o_employee_schedule_line_form .o_field_widget[name="note"] .o_readonly {
+    min-height: 260px !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}
+
+.o_employee_schedule_line_form .o_employee_schedule_note_full,
+.o_employee_schedule_line_form .o_employee_schedule_note_full .o_field_html,
+.o_employee_schedule_line_form .o_employee_schedule_note_full .note-editor {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.o_employee_schedule_line_form .o_employee_schedule_note_full .note-toolbar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.o_employee_schedule_line_form .o_field_widget[name="note"] img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 520px !important;
+}

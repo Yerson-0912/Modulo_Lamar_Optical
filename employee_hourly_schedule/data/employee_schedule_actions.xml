@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_duplicate_assigned_task_line" model="ir.actions.server">
+        <field name="name">Duplicar tarea asignada</field>
+        <field name="model_id" ref="model_x_employee_hourly_schedule_line"/>
+        <field name="state">code</field>
+        <field name="code"><![CDATA[
+if not records:
+    action = False
+else:
+    record = records[0]
+    duplicated = record.copy({'is_done': False, 'state': 'pending'})
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Actividad Duplicada',
+        'res_model': 'x_employee_hourly_schedule_line',
+        'view_mode': 'form',
+        'res_id': duplicated.id,
+        'target': 'current',
+    }
+        ]]></field>
+    </record>
+</odoo>

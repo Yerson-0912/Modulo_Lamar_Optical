@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Cron para duplicar automáticamente horarios recurrentes cada semana -->
+    <record id="ir_cron_duplicate_recurrent_schedules" model="ir.cron">
+        <field name="name">Duplicar Horarios Recurrentes Semanalmente</field>
+        <field name="model_id" ref="model_x_employee_hourly_schedule"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_duplicate_recurrent_schedules()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="True"/>
+        <field name="doall" eval="True"/>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 01:00:00')"/>
+    </record>
+</odoo>

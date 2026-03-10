@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_hourly_schedule_user,employee.hourly.schedule user,model_x_employee_hourly_schedule,hr.group_hr_user,1,1,1,1
+access_employee_hourly_schedule_line_user,employee.hourly.schedule.line user,model_x_employee_hourly_schedule_line,hr.group_hr_user,1,1,1,1
+access_employee_hourly_schedule_manager,employee.hourly.schedule manager,model_x_employee_hourly_schedule,hr.group_hr_manager,1,1,1,1
+access_employee_hourly_schedule_line_manager,employee.hourly.schedule.line manager,model_x_employee_hourly_schedule_line,hr.group_hr_manager,1,1,1,1
+access_employee_schedule_duplicate_wizard_user,employee.schedule.duplicate.wizard user,model_x_employee_schedule_duplicate_wizard,hr.group_hr_user,1,1,1,1
+access_employee_schedule_duplicate_wizard_manager,employee.schedule.duplicate.wizard manager,model_x_employee_schedule_duplicate_wizard,hr.group_hr_manager,1,1,1,1

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista del Wizard para Duplicar a Múltiples Semanas -->
+    <record id="view_employee_schedule_duplicate_wizard_form" model="ir.ui.view">
+        <field name="name">employee.schedule.duplicate.wizard.form</field>
+        <field name="model">x_employee_schedule_duplicate_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Duplicar Horario a Varias Semanas">
+                <group>
+                    <group>
+                        <field name="schedule_id" invisible="1"/>
+                        <field name="employee_name"/>
+                        <field name="original_date"/>
+                    </group>
+                    <group>
+                        <field name="num_weeks" 
+                               help="Ejemplo: 4 = creará horarios para las próximas 4 semanas"/>
+                        <field name="skip_existing"/>
+                        <field name="mark_as_recurrent"/>
+                    </group>
+                </group>
+                <separator string="💡 Información"/>
+                <div class="alert alert-info" role="alert" style="margin: 10px;">
+                    <p><strong>¿Cómo funciona?</strong></p>
+                    <ul>
+                        <li>Se crearán copias exactas del horario actual</li>
+                        <li>Las fechas se ajustarán automáticamente (1 semana = 7 días)</li>
+                        <li>Las tareas se reiniciarán como "Pendiente"</li>
+                        <li>Si marca como "Recurrente", las copias también se replicarán automáticamente</li>
+                    </ul>
+                </div>
+                <footer>
+                    <button name="action_duplicate" string="🔁 Duplicar" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
