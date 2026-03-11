@@ -5,12 +5,14 @@
         <field name="name">Duplicar Horarios Recurrentes Semanalmente</field>
         <field name="model_id" ref="model_x_employee_hourly_schedule"/>
         <field name="state">code</field>
+        <!-- Ejecuta el método de cobertura futura sobre planes marcados como recurrentes. -->
         <field name="code">model.cron_duplicate_recurrent_schedules()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
         <field name="active" eval="True"/>
         <field name="doall" eval="True"/>
+        <!-- Se programa de madrugada para minimizar impacto sobre usuarios conectados. -->
         <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 01:00:00')"/>
     </record>
 </odoo>

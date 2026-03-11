@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Acción servidor para duplicar una actividad puntual desde lista o formulario. -->
     <record id="action_duplicate_assigned_task_line" model="ir.actions.server">
         <field name="name">Duplicar tarea asignada</field>
         <field name="model_id" ref="model_x_employee_hourly_schedule_line"/>
         <field name="state">code</field>
         <field name="code"><![CDATA[
+# Se toma solo el primer registro seleccionado, ya que la acción está pensada
+# para ejecutarse sobre una actividad concreta desde la interfaz.
 if not records:
     action = False
 else:

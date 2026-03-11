@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="0">
+        <!-- Registro explícito de modelos usado por acciones, seguridad y cron. -->
         <record id="model_x_employee_hourly_schedule" model="ir.model">
             <field name="name">x_employee_hourly_schedule</field>
             <field name="model">x_employee_hourly_schedule</field>
         </record>
+        <!-- Modelo detalle para actividades horarias. -->
         <record id="model_x_employee_hourly_schedule_line" model="ir.model">
             <field name="name">x_employee_hourly_schedule_line</field>
             <field name="model">x_employee_hourly_schedule_line</field>
         </record>
+        <!-- Modelo transitorio del asistente de duplicación múltiple. -->
         <record id="model_x_employee_schedule_duplicate_wizard" model="ir.model">
             <field name="name">x_employee_schedule_duplicate_wizard</field>
             <field name="model">x_employee_schedule_duplicate_wizard</field>

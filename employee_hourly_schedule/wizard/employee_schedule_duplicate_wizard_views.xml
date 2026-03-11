@@ -6,6 +6,7 @@
         <field name="model">x_employee_schedule_duplicate_wizard</field>
         <field name="arch" type="xml">
             <form string="Duplicar Horario a Varias Semanas">
+                <!-- Sección superior: contexto del plan origen y parámetros de copia. -->
                 <group>
                     <group>
                         <field name="schedule_id" invisible="1"/>
@@ -20,6 +21,7 @@
                     </group>
                 </group>
                 <separator string="💡 Información"/>
+                <!-- Ayuda visual para usuarios funcionales que no conocen la lógica interna. -->
                 <div class="alert alert-info" role="alert" style="margin: 10px;">
                     <p><strong>¿Cómo funciona?</strong></p>
                     <ul>
@@ -30,6 +32,7 @@
                     </ul>
                 </div>
                 <footer>
+                    <!-- Pie estándar del wizard con acción principal y cancelación. -->
                     <button name="action_duplicate" string="🔁 Duplicar" type="object" class="btn-primary"/>
                     <button string="Cancelar" class="btn-secondary" special="cancel"/>
                 </footer>

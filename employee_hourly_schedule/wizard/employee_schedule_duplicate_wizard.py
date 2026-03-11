@@ -20,6 +20,7 @@ class EmployeeScheduleDuplicateWizard(models.TransientModel):
     _name = 'x_employee_schedule_duplicate_wizard'
     _description = 'Asistente para Duplicar Horarios'
 
+    # Datos solo lectura para que el usuario tenga contexto del plan origen.
     schedule_id = fields.Many2one(
         'x_employee_hourly_schedule',
         string='Horario a Duplicar',
@@ -70,6 +71,7 @@ class EmployeeScheduleDuplicateWizard(models.TransientModel):
         created_count = 0
         skipped_count = 0
 
+        # Cada iteración representa una semana futura a partir del plan base.
         for week_offset in range(1, self.num_weeks + 1):
             target_date = self.schedule_id.date + timedelta(days=7 * week_offset)
             existing = schedule_model.search([
@@ -79,6 +81,7 @@ class EmployeeScheduleDuplicateWizard(models.TransientModel):
 
             if existing:
                 skipped_count += 1
+                # Si el usuario no permite omitir, se aborta en el primer conflicto.
                 if not self.skip_existing:
                     raise UserError(
                         f'Ya existe un horario para {self.schedule_id.employee_id.name} en {target_date}.'
@@ -88,6 +91,7 @@ class EmployeeScheduleDuplicateWizard(models.TransientModel):
             created = self.schedule_id._duplicate_schedule(weeks=week_offset, notify=False)
             if created:
                 created_count += 1
+                # Permite crear copias puntuales sin convertirlas en plantillas futuras.
                 if not self.mark_as_recurrent:
                     created_schedule = schedule_model.search([
                         ('employee_id', '=', self.schedule_id.employee_id.id),

@@ -11,3 +11,5 @@ Desarrollador:
 """
 
 from . import employee_schedule
+
+# Punto único de carga para la capa de negocio del módulo.

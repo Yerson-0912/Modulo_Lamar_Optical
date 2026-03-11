@@ -1,4 +1,5 @@
 {
+    # Metadatos visibles en Apps y en la ficha técnica del módulo.
     "name": "Planeación Operativa",
     "summary": "Planeación operativa por horas para registrar actividades y jornadas laborales",
     "description": """
@@ -38,12 +39,14 @@ INSTALACIÓN:
     "support": "yervargas@gmail.com",
     "website": "mailto:yervargas@gmail.com",
     "license": "LGPL-3",
+    # Dependencias mínimas para empleados, proyectos y assets backend.
     "depends": [
         "base",
         "hr",
         "project",
         "web",
     ],
+    # Orden de carga funcional: seguridad, acciones, vistas, wizard y automatización.
     "data": [
         "security/ir.model.access.csv",
         "data/employee_schedule_actions.xml",
@@ -51,6 +54,7 @@ INSTALACIÓN:
         "wizard/employee_schedule_duplicate_wizard_views.xml",
         "data/employee_schedule_cron.xml",
     ],
+    # Assets frontend usados para reforzar la lectura visual del calendario.
     "assets": {
         "web.assets_backend": [
             "employee_hourly_schedule/static/src/css/employee_schedule.css",

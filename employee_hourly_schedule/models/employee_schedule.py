@@ -38,6 +38,7 @@ class EmployeeHourlySchedule(models.Model):
     _description = "Planeación Operativa"
     _order = "date desc, employee_id"
 
+    # Identidad operativa del plan diario.
     employee_id = fields.Many2one(
         "hr.employee",
         string="Empleado",
@@ -86,6 +87,7 @@ class EmployeeHourlySchedule(models.Model):
         help="Si está marcado, este horario se replicará automáticamente cada semana",
     )
 
+    # Garantiza que un empleado no tenga dos cabeceras para el mismo día.
     _sql_constraints = [
         (
             "employee_date_unique",
@@ -126,6 +128,7 @@ class EmployeeHourlySchedule(models.Model):
             lines = schedule.line_ids
             if not lines:
                 continue
+            # Si existe al menos una línea pendiente, el botón completa todo.
             mark_done = any(not line.is_done for line in lines)
             lines.write({"is_done": mark_done, "state": "done" if mark_done else "in_progress"})
 
@@ -152,6 +155,7 @@ class EmployeeHourlySchedule(models.Model):
         - Si no existe, crea un nuevo plan con sus líneas desplazadas.
         """
         self.ensure_one()
+        # Toda duplicación trabaja desplazando exactamente 7 días por semana.
         new_date = self.date + timedelta(days=7 * weeks)
         existing = self.search([
             ("employee_id", "=", self.employee_id.id),
@@ -159,6 +163,8 @@ class EmployeeHourlySchedule(models.Model):
         ], limit=1)
 
         if existing:
+            # En sincronización recurrente se actualiza el destino existente
+            # para mantener plantillas históricas y semanas futuras alineadas.
             if self.env.context.get("recurrent_sync") and self.is_recurrent:
                 days_diff = (new_date - self.date).days
                 existing.with_context(skip_recurrent_sync=True).write({
@@ -179,6 +185,7 @@ class EmployeeHourlySchedule(models.Model):
                 },
             }
 
+        # Se crea primero la cabecera y luego se regeneran las líneas con fechas nuevas.
         new_schedule = self.copy({
             "date": new_date,
             "is_recurrent": self.is_recurrent,
@@ -206,12 +213,14 @@ class EmployeeHourlySchedule(models.Model):
         }
 
     def _get_current_week_equivalent_date(self):
+        """Devuelve el día equivalente de la semana actual para una plantilla vieja."""
         self.ensure_one()
         today = fields.Date.context_today(self)
         week_start = today - timedelta(days=today.weekday())
         return week_start + timedelta(days=self.date.weekday())
 
     def _get_or_create_schedule_for_date(self, target_date):
+        """Busca o crea la cabecera destino usada en redirecciones recurrentes."""
         self.ensure_one()
         target_schedule = self.search([
             ("employee_id", "=", self.employee_id.id),
@@ -234,6 +243,7 @@ class EmployeeHourlySchedule(models.Model):
         return target_schedule
 
     def _should_redirect_recurrent_edit(self):
+        """Indica si una edición debe redirigirse a la semana vigente equivalente."""
         self.ensure_one()
         if not self.is_recurrent or not self.date:
             return False
@@ -274,6 +284,11 @@ class EmployeeHourlySchedule(models.Model):
                 current_schedule = next_schedule
 
     def _is_only_line_status_write(self, vals):
+        """Detecta escrituras inline que solo cambian estado en one2many.
+
+        Este caso se deja pasar sin redirecciones para no interferir con
+        cambios rápidos desde la vista de lista embebida.
+        """
         if set(vals.keys()) != {"line_ids"}:
             return False
 
@@ -300,6 +315,7 @@ class EmployeeHourlySchedule(models.Model):
 
     @api.model
     def cron_duplicate_recurrent_schedules(self):
+        """Cron diario que garantiza la siguiente semana de planes recurrentes."""
         today = fields.Date.context_today(self)
         target_date = today + timedelta(days=7)
 
@@ -311,6 +327,7 @@ class EmployeeHourlySchedule(models.Model):
         duplicated_count = 0
         for seed_schedule in recurrent_schedules:
             try:
+                # Se avanza semana a semana hasta asegurar cobertura futura.
                 current_schedule = seed_schedule
                 while current_schedule.date and current_schedule.date <= target_date:
                     next_date = current_schedule.date + timedelta(days=7)
@@ -359,6 +376,8 @@ class EmployeeHourlySchedule(models.Model):
         if self._is_only_line_status_write(vals):
             return super().write(vals)
 
+        # Los planes históricos marcados como recurrentes se editan sobre su
+        # equivalente de la semana actual para no desalinear la plantilla viva.
         redirect_records = self.filtered(lambda schedule: schedule._should_redirect_recurrent_edit())
         direct_records = self - redirect_records
         redirected_targets = self.env["x_employee_hourly_schedule"]
@@ -390,8 +409,10 @@ class EmployeeHourlyScheduleLine(models.Model):
     _description = "Actividad de Planeación Operativa"
     _order = "start_datetime"
 
+    # Límite usado para marcar visualmente sobrecarga operativa diaria.
     _DEFAULT_DAILY_LIMIT_HOURS = 8.0
 
+    # Relación base y contexto organizacional heredado desde el empleado.
     schedule_id = fields.Many2one(
         "x_employee_hourly_schedule",
         string="Plan",
@@ -439,12 +460,14 @@ class EmployeeHourlyScheduleLine(models.Model):
     project_id = fields.Many2one("project.project", string="Proyecto")
     task_id = fields.Many2one("project.task", string="Tarea")
     note = fields.Text(string="Notas", help="Notas sobre la actividad realizada")
+    # Evidencia principal visible dentro del formulario de actividad.
     activity_photo = fields.Image(
         string="📸 Foto Principal",
         max_width=1024,
         max_height=1024,
         help="Foto principal de la actividad",
     )
+    # El contador abre y resume adjuntos asociados al registro actual.
     attachment_count = fields.Integer(
         string="📷 Fotos Adjuntas",
         compute="_compute_attachment_count",
@@ -467,12 +490,14 @@ class EmployeeHourlyScheduleLine(models.Model):
 
     @api.depends("start_datetime")
     def _compute_date(self):
+        """Normaliza la fecha operativa desde el inicio para filtros y agrupación."""
         for line in self:
             line.date = fields.Date.to_date(line.start_datetime) if line.start_datetime else False
 
     @api.depends("employee_id", "activity_name", "start_datetime", "end_datetime", "is_done")
     @api.depends_context("tz")
     def _compute_name(self):
+        """Construye un título legible usando horario, empleado y actividad."""
         for line in self:
             parts = []
             if line.start_datetime and line.end_datetime:
@@ -489,6 +514,7 @@ class EmployeeHourlyScheduleLine(models.Model):
 
     @api.depends("start_datetime", "end_datetime")
     def _compute_duration_hours(self):
+        """Calcula duración real en horas a partir del rango datetime."""
         for line in self:
             if line.start_datetime and line.end_datetime:
                 delta = line.end_datetime - line.start_datetime
@@ -499,6 +525,7 @@ class EmployeeHourlyScheduleLine(models.Model):
     @api.depends("start_datetime", "end_datetime")
     @api.depends_context("tz")
     def _compute_time_range(self):
+        """Genera el rango horario amigable mostrado en vistas de lista."""
         for line in self:
             if line.start_datetime and line.end_datetime:
                 tz = self.env.context.get("tz") or self.env.user.tz
@@ -510,6 +537,7 @@ class EmployeeHourlyScheduleLine(models.Model):
 
     @api.depends("employee_id", "date", "duration_hours")
     def _compute_daily_total_hours(self):
+        """Agrupa por empleado y fecha para evitar recalcular línea por línea."""
         for line in self:
             line.daily_total_hours = 0.0
         lines = self.filtered(lambda l: l.employee_id and l.date)
@@ -543,12 +571,14 @@ class EmployeeHourlyScheduleLine(models.Model):
 
     @api.depends("daily_total_hours")
     def _compute_is_overloaded(self):
+        """Marca sobrecarga cuando el total diario supera el umbral configurado."""
         limit_hours = self._DEFAULT_DAILY_LIMIT_HOURS
         for line in self:
             line.is_overloaded = line.daily_total_hours > limit_hours
 
     @api.depends("is_done", "state")
     def _compute_calendar_color(self):
+        """Mapea estado lógico a índices de color usados por el CSS del calendario."""
         for line in self:
             line.calendar_color = 1 if line.is_done or line.state == "done" else 0
 
@@ -562,6 +592,7 @@ class EmployeeHourlyScheduleLine(models.Model):
                 record.state = "in_progress"
 
     def _compute_attachment_count(self):
+        """Cuenta adjuntos ligados al registro para mostrar el stat button."""
         for line in self:
             attachments = self.env["ir.attachment"].search([
                 ("res_model", "=", "x_employee_hourly_schedule_line"),
@@ -570,6 +601,7 @@ class EmployeeHourlyScheduleLine(models.Model):
             line.attachment_count = len(attachments)
 
     def action_attachment_open(self):
+        """Abre la galería de adjuntos filtrada a la actividad actual."""
         self.ensure_one()
         return {
             "name": "📷 Fotos de la Actividad",
@@ -589,6 +621,7 @@ class EmployeeHourlyScheduleLine(models.Model):
         }
 
     def action_duplicate_assigned_task(self):
+        """Duplica una línea individual reiniciando su estado operativo."""
         self.ensure_one()
         duplicated_line = self.copy({"is_done": False, "state": "pending"})
         return {
@@ -601,6 +634,7 @@ class EmployeeHourlyScheduleLine(models.Model):
         }
 
     def _sync_recurrent_next_week(self):
+        """Propaga cambios de líneas hacia la próxima semana si el plan es recurrente."""
         if self.env.context.get("skip_recurrent_sync"):
             return
         schedules = self.mapped("schedule_id").filtered("is_recurrent")
@@ -623,6 +657,7 @@ class EmployeeHourlyScheduleLine(models.Model):
         normalized_vals_list = []
         for vals in vals_list:
             vals = dict(vals)
+            # Permite crear líneas desde formularios anidados sin enviar schedule_id explícito.
             if not vals.get("schedule_id") and default_schedule_id:
                 vals["schedule_id"] = default_schedule_id
             if not vals.get("schedule_id"):
@@ -630,6 +665,7 @@ class EmployeeHourlyScheduleLine(models.Model):
             schedule_id = vals.get("schedule_id")
             if schedule_id:
                 schedule = self.env["x_employee_hourly_schedule"].browse(schedule_id)
+                # Si la línea se crea sobre una plantilla pasada, se redirige al equivalente vigente.
                 if schedule.exists() and schedule.is_recurrent and schedule.date and schedule.date < week_start:
                     target_date = schedule._get_current_week_equivalent_date()
                     target_schedule = schedule._get_or_create_schedule_for_date(target_date)
@@ -649,6 +685,7 @@ class EmployeeHourlyScheduleLine(models.Model):
         if self.env.context.get("skip_recurrent_sync"):
             return super().write(vals)
 
+        # Se distingue el cambio de estado puro para no disparar sincronizaciones innecesarias.
         only_status_update = set(vals.keys()).issubset({"is_done", "state"})
 
         if "is_done" in vals and "state" not in vals:
@@ -671,6 +708,7 @@ class EmployeeHourlyScheduleLine(models.Model):
         return res
 
     def unlink(self):
+        """Elimina líneas y re-sincroniza la siguiente semana cuando aplica."""
         if self.env.context.get("skip_recurrent_sync"):
             return super().unlink()
         schedules = self.mapped("schedule_id")

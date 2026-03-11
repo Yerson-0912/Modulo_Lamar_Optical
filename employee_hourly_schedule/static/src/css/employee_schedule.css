@@ -2,6 +2,10 @@
  * Planeación Operativa - Employee Hourly Schedule
  * Estilos de calendario por estado de tarea
  * Aplica en vistas: mes, semana y día
+ *
+ * Mapa de color usado por calendar_color:
+ * - 0: actividad pendiente o en progreso
+ * - 1: actividad completada
  */
 
 /* ===============================================
@@ -134,6 +138,7 @@ div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 *,
 
 /* ===============================================
    HOVER EN TODAS LAS VISTAS
+    Refuerza la interacción visual sin alterar la semántica del estado.
    =============================================== */
 .fc-event.o_calendar_color_0:hover,
 .fc-event.o_calendar_color_1:hover,
@@ -145,5 +150,4 @@ div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 *,
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
     transform: scale(1.02);
-}
 }

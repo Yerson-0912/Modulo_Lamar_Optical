@@ -13,6 +13,7 @@
     @license LGPL-3
 -->
 <odoo>
+    <!-- Cabecera diaria por empleado. Resume fecha, empleado y bandera de recurrencia. -->
     <record id="view_employee_hourly_schedule_tree" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.list</field>
         <field name="model">x_employee_hourly_schedule</field>
@@ -31,12 +32,14 @@
         </field>
     </record>
 
+    <!-- Formulario principal del plan. Desde aquí se crean y administran las líneas del día. -->
     <record id="view_employee_hourly_schedule_form" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.form</field>
         <field name="model">x_employee_hourly_schedule</field>
         <field name="arch" type="xml">
             <form string="Planeación Operativa por Horas">
                 <header>
+                    <!-- Accesos rápidos de duplicación para trabajo operativo desde la cabecera. -->
                     <button name="action_duplicate_to_next_week" 
                             string="📅 Duplicar a Próxima Semana" 
                             type="object" 
@@ -49,6 +52,7 @@
                             help="Copia este horario a múltiples semanas futuras"/>
                 </header>
                 <sheet>
+                    <!-- Botonera estadística con acciones masivas sobre las actividades hijas. -->
                     <div class="oe_button_box" name="button_box">
                         <button name="toggle_done" 
                                 type="object" 
@@ -74,26 +78,31 @@
                         </group>
                     </group>
                     <notebook>
+                        <!-- Página operativa principal: líneas de trabajo del día. -->
                         <page string="📋 Horas del Día" name="hours">
                             <field name="line_ids" context="{'default_schedule_id': id}">
-                                <tree editable="bottom" 
-                                      decoration-success="is_done and state == 'done'" 
-                                      decoration-info="state == 'in_progress'" 
-                                      decoration-warning="state == 'pending' and not is_overloaded" 
+                            <tree editable="bottom"
+                                  decoration-success="is_done and state == 'done'"
+                                  decoration-info="state == 'in_progress'"
+                                  decoration-warning="state == 'pending' and not is_overloaded"
                                       decoration-danger="is_overloaded"
                                       decoration-bf="is_overloaded or state == 'in_progress'">
-                                                                        <button name="%(action_duplicate_assigned_task_line)d"
-                                                                                        type="action"
-                                                                                        icon="fa-copy"
-                                                                                        string="Duplicar"
-                                                                                                                            class="btn-link"/>
+                                <button name="%(action_duplicate_assigned_task_line)d"
+                                    type="action"
+                                    icon="fa-copy"
+                                    string="Duplicar"
+                                    class="btn-link"/>
                                     <field name="activity_name"/>
                                     <field name="start_datetime"/>
                                     <field name="end_datetime"/>
                                     <field name="duration_hours" sum="Total Horas"/>
                                     <field name="project_id"/>
                                     <field name="task_id"/>
-                                    <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'in_progress'" decoration-warning="state == 'pending'"/>
+                                <field name="state"
+                                   widget="badge"
+                                   decoration-success="state == 'done'"
+                                   decoration-info="state == 'in_progress'"
+                                   decoration-warning="state == 'pending'"/>
                                     <field name="is_done" widget="boolean_toggle"/>
                                     <field name="is_overloaded" invisible="1"/>
                                     <field name="note"/>
@@ -106,6 +115,7 @@
         </field>
     </record>
 
+    <!-- Búsqueda simple para cabeceras diarias. -->
     <record id="view_employee_hourly_schedule_search" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.search</field>
         <field name="model">x_employee_hourly_schedule</field>
@@ -119,18 +129,19 @@
         </field>
     </record>
 
+    <!-- Lista transversal de actividades, útil para supervisión y seguimiento global. -->
     <record id="view_employee_hourly_schedule_line_list" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.line.list</field>
         <field name="model">x_employee_hourly_schedule_line</field>
         <field name="arch" type="xml">
-            <tree string="Actividades" 
-                  decoration-success="is_done and state == 'done'" 
-                  decoration-info="state == 'in_progress' and not is_overloaded" 
-                  decoration-warning="state == 'pending' and not is_overloaded" 
+            <tree string="Actividades"
+                                    decoration-success="is_done and state == 'done'"
+                                    decoration-info="state == 'in_progress' and not is_overloaded"
+                                    decoration-warning="state == 'pending' and not is_overloaded"
                   decoration-danger="is_overloaded"
                   decoration-bf="is_overloaded or state == 'in_progress'"
                   decoration-muted="is_done and state == 'done'">
-                                <button name="%(action_duplicate_assigned_task_line)d"
+                <button name="%(action_duplicate_assigned_task_line)d"
                                                 type="action"
                                                 icon="fa-copy"
                                                 string="Duplicar"
@@ -147,19 +158,25 @@
                 <field name="duration_hours" sum="Total Horas"/>
                 <field name="project_id"/>
                 <field name="task_id"/>
-                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'in_progress'" decoration-warning="state == 'pending'"/>
+                                <field name="state"
+                                             widget="badge"
+                                             decoration-success="state == 'done'"
+                                             decoration-info="state == 'in_progress'"
+                                             decoration-warning="state == 'pending'"/>
                 <field name="is_done" widget="boolean_toggle"/>
                 <field name="is_overloaded" invisible="1"/>
             </tree>
         </field>
     </record>
 
+    <!-- Formulario detallado de la actividad con evidencia, tiempos y trazabilidad. -->
     <record id="view_employee_hourly_schedule_line_form" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.line.form</field>
         <field name="model">x_employee_hourly_schedule_line</field>
         <field name="arch" type="xml">
             <form string="Actividad de Planeación">
                 <header>
+                    <!-- El statusbar y la duplicación individual resuelven la operación diaria. -->
                     <button name="%(action_duplicate_assigned_task_line)d"
                             string="🔁 Duplicar Tarea"
                             type="action"
@@ -168,19 +185,32 @@
                     <field name="state" widget="statusbar" statusbar_visible="pending,in_progress,done"/>
                 </header>
                 <sheet>
+                    <!-- Indicadores rápidos del registro actual. -->
                     <div class="oe_button_box" name="button_box">
-                        <button name="toggle_done" type="object" class="oe_stat_button" icon="fa-check-circle" invisible="is_done">
+                        <button name="toggle_done"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle"
+                                invisible="is_done">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text">Marcar</span>
                                 <span class="o_stat_text">Hecho</span>
                             </div>
                         </button>
-                        <button name="toggle_done" type="object" class="oe_stat_button" icon="fa-check-circle" style="color: green;" invisible="not is_done">
+                        <button name="toggle_done"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle"
+                                style="color: green;"
+                                invisible="not is_done">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text" style="color: green;">✓ Completado</span>
                             </div>
                         </button>
-                        <button name="action_attachment_open" type="object" class="oe_stat_button" icon="fa-image">
+                        <button name="action_attachment_open"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-image">
                             <field name="attachment_count" widget="statinfo" string="Fotos"/>
                         </button>
                     </div>
@@ -190,6 +220,7 @@
                         </h1>
                     </div>
                     <group>
+                        <!-- Bloque maestro: datos de contexto heredados del plan y del empleado. -->
                         <group string="📋 Información General">
                             <field name="schedule_id"/>
                             <field name="employee_id" readonly="1"/>
@@ -206,6 +237,7 @@
                         </group>
                     </group>
                     <group>
+                        <!-- Relación opcional con proyecto y tarea para integración operativa. -->
                         <group string="🎯 Proyecto y Tarea">
                             <field name="project_id"/>
                             <field name="task_id" domain="[('project_id', '=', project_id)]"/>
@@ -215,6 +247,7 @@
                         </group>
                     </group>
                     <group>
+                        <!-- Evidencia principal visible directamente en el formulario. -->
                         <group string="📸 Foto Principal de la Actividad">
                             <field name="activity_photo" widget="image" nolabel="1"/>
                         </group>
@@ -231,11 +264,17 @@
         </field>
     </record>
 
+    <!-- Vista agenda para lectura visual de carga operativa. -->
     <record id="view_employee_hourly_schedule_line_calendar" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.line.calendar</field>
         <field name="model">x_employee_hourly_schedule_line</field>
         <field name="arch" type="xml">
-            <calendar string="Calendario" date_start="start_datetime" date_stop="end_datetime" color="calendar_color" mode="month" event_open_popup="true">
+            <calendar string="Calendario"
+                      date_start="start_datetime"
+                      date_stop="end_datetime"
+                      color="calendar_color"
+                      mode="month"
+                      event_open_popup="true">
                 <field name="name"/>
                 <field name="employee_id"/>
                 <field name="department_id"/>
@@ -250,6 +289,7 @@
     </record>
 
 
+    <!-- Vista analítica para explotar horas por empleado y fecha. -->
     <record id="view_employee_hourly_schedule_line_pivot" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.line.pivot</field>
         <field name="model">x_employee_hourly_schedule_line</field>
@@ -262,6 +302,7 @@
         </field>
     </record>
 
+    <!-- Buscador avanzado de actividades con filtros por estado, fecha y área. -->
     <record id="view_employee_hourly_schedule_line_search" model="ir.ui.view">
         <field name="name">employee.hourly.schedule.line.search</field>
         <field name="model">x_employee_hourly_schedule_line</field>
@@ -303,6 +344,7 @@
         </field>
     </record>
 
+    <!-- Acción principal para administrar planes diarios. -->
     <record id="action_employee_hourly_schedule" model="ir.actions.act_window">
         <field name="name">Planeación Operativa</field>
         <field name="res_model">x_employee_hourly_schedule</field>
@@ -315,6 +357,7 @@
         </field>
     </record>
 
+    <!-- Acción transversal para agenda y consulta detallada de actividades. -->
     <record id="action_employee_hourly_schedule_line" model="ir.actions.act_window">
         <field name="name">Agenda Operativa</field>
         <field name="res_model">x_employee_hourly_schedule_line</field>
@@ -322,6 +365,7 @@
         <field name="search_view_id" ref="view_employee_hourly_schedule_line_search"/>
     </record>
 
+    <!-- Vista simplificada para que cada empleado gestione sus propias tareas. -->
     <record id="action_employee_hourly_schedule_line_my_pending" model="ir.actions.act_window">
         <field name="name">Mis Tareas</field>
         <field name="res_model">x_employee_hourly_schedule_line</field>
@@ -330,6 +374,7 @@
         <field name="domain">[("employee_id.user_id", "=", uid)]</field>
     </record>
 
+    <!-- Entrada analítica para responsables de control y seguimiento. -->
     <record id="action_employee_hourly_schedule_report" model="ir.actions.act_window">
         <field name="name">Reporte por Empleado</field>
         <field name="res_model">x_employee_hourly_schedule_line</field>
@@ -338,6 +383,7 @@
         <field name="context">{"search_default_group_by_employee_id": 1}</field>
     </record>
 
+    <!-- Menú raíz dentro de Recursos Humanos. -->
     <menuitem id="menu_employee_hourly_schedule_root"
               name="Planeacion Operativa"
               parent="hr.menu_hr_root"
