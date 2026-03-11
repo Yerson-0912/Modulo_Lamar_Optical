@@ -96,6 +96,7 @@
                                     <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'in_progress'" decoration-warning="state == 'pending'"/>
                                     <field name="is_done" widget="boolean_toggle"/>
                                     <field name="is_overloaded" invisible="1"/>
+                                    <field name="note"/>
                                 </tree>
                             </field>
                         </page>
@@ -157,7 +158,7 @@
         <field name="name">employee.hourly.schedule.line.form</field>
         <field name="model">x_employee_hourly_schedule_line</field>
         <field name="arch" type="xml">
-            <form string="Actividad de Planeación" class="o_employee_schedule_line_form">
+            <form string="Actividad de Planeación">
                 <header>
                     <button name="%(action_duplicate_assigned_task_line)d"
                             string="🔁 Duplicar Tarea"
@@ -218,14 +219,14 @@
                             <field name="activity_photo" widget="image" nolabel="1"/>
                         </group>
                     </group>
-                    <separator string="📝 Notas y Observaciones"/>
-                    <field name="note" widget="html" nolabel="1" class="o_employee_schedule_note_full" placeholder="Agrega notas, descripciones o comentarios sobre esta actividad..."/>
+                    <group string="📝 Notas y Observaciones">
+                        <field name="note" nolabel="1" placeholder="Agrega notas, descripciones o comentarios sobre esta actividad..."/>
+                    </group>
                     <separator/>
                     <p class="oe_inline" style="color: gray; font-size: small;">
                         💡 Consejo: Puedes agregar más fotos desde el botón de 📷 Fotos en la parte superior.
                     </p>
                 </sheet>
-                <chatter/>
             </form>
         </field>
     </record>
@@ -326,7 +327,7 @@
         <field name="res_model">x_employee_hourly_schedule_line</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_employee_hourly_schedule_line_search"/>
-        <field name="domain">['|', ('employee_id.user_id', '=', uid), ('create_uid', '=', uid)]</field>
+        <field name="domain">[("employee_id.user_id", "=", uid)]</field>
     </record>
 
     <record id="action_employee_hourly_schedule_report" model="ir.actions.act_window">

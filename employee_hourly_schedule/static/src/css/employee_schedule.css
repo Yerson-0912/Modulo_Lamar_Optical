@@ -146,32 +146,4 @@ div.o_calendar_renderer .fc-timegrid-event.o_calendar_color_1 *,
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
     transform: scale(1.02);
 }
-
-/* ===============================================
-   NOTAS Y OBSERVACIONES - TAMAÑO LEGIBLE
-   =============================================== */
-.o_employee_schedule_line_form .o_field_widget[name="note"] .note-editable,
-.o_employee_schedule_line_form .o_field_widget[name="note"] .o_readonly {
-    min-height: 260px !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-}
-
-.o_employee_schedule_line_form .o_employee_schedule_note_full,
-.o_employee_schedule_line_form .o_employee_schedule_note_full .o_field_html,
-.o_employee_schedule_line_form .o_employee_schedule_note_full .note-editor {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
-.o_employee_schedule_line_form .o_employee_schedule_note_full .note-toolbar {
-    display: flex !important;
-    flex-wrap: wrap !important;
-}
-
-.o_employee_schedule_line_form .o_field_widget[name="note"] img {
-    width: auto !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: 520px !important;
 }

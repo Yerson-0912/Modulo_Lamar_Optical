@@ -387,7 +387,6 @@ class EmployeeHourlyScheduleLine(models.Model):
     """Detalle de actividad horaria asociada a un plan diario."""
 
     _name = "x_employee_hourly_schedule_line"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Actividad de Planeación Operativa"
     _order = "start_datetime"
 
@@ -439,12 +438,7 @@ class EmployeeHourlyScheduleLine(models.Model):
     date = fields.Date(string="Día", compute="_compute_date", store=True)
     project_id = fields.Many2one("project.project", string="Proyecto")
     task_id = fields.Many2one("project.task", string="Tarea")
-    note = fields.Html(
-        string="Notas",
-        help="Notas sobre la actividad realizada",
-        sanitize_attributes=False,
-        sanitize_form=False,
-    )
+    note = fields.Text(string="Notas", help="Notas sobre la actividad realizada")
     activity_photo = fields.Image(
         string="📸 Foto Principal",
         max_width=1024,

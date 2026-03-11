@@ -41,7 +41,6 @@ INSTALACIÓN:
     "depends": [
         "base",
         "hr",
-        "mail",
         "project",
         "web",
     ],

@@ -11,4 +11,3 @@ Desarrollador:
 """
 
 from . import employee_schedule
-from . import ir_attachment
